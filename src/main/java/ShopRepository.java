@@ -3,6 +3,7 @@ public class ShopRepository {
 
     /**
      * Вспомогательный метод для имитации добавления элемента в массив
+     *
      * @param current — массив, в который мы хотим добавить элемент
      * @param product — элемент, который мы хотим добавить
      * @return — возвращает новый массив, который выглядит, как тот, что мы передали,
@@ -19,6 +20,7 @@ public class ShopRepository {
 
     /**
      * Метод добавления товара в репозиторий
+     *
      * @param product — добавляемый товар
      */
     public void add(Product product) {
@@ -29,15 +31,14 @@ public class ShopRepository {
         return products;
     }
 
+
     // Этот способ мы рассматривали в теории в теме про композицию
-    public void removeById(int id) {
-        if (id<0) {
-            throw new NotFoundException(
-                    "Невозможно удалить несуществующий продукт"
-            );
-        }
-    }
     public void remove(int id) {
+        Product removingProduct = findById(id);
+        if (removingProduct == null) {
+            throw new NotFoundException(id);
+        }
+
         Product[] tmp = new Product[products.length - 1];
         int copyToIndex = 0;
         for (Product product : products) {
@@ -47,5 +48,14 @@ public class ShopRepository {
             }
         }
         products = tmp;
+    }
+
+    private Product findById(int id) {
+        for (Product product : products) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+        return null;
     }
 }
